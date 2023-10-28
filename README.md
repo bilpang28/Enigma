@@ -1,23 +1,300 @@
-# Enigma
-EnigmaEncrypt 
+# KIJ-1
+# Enigma Encrypt 
 
-output :
-![image](https://github.com/bilpang28/Enigma/assets/54619042/410a8d5e-2fdf-4b58-9561-bb96b9cb03a1)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/b0a62811-60b0-4712-8d6e-5450fe443fcc)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/9918777f-fc6c-46bf-8a68-40a78508a3f3)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/74ed761b-34c3-4a19-9647-072c6df7ee71)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/1ca52ca6-ce3d-4315-92c4-67b7bc87a844)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/f2b71652-df41-467e-a9fb-7364c6137350)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/c1ee66c6-16ab-41e9-ae16-286e6bb146d8)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/22ebe13a-f17d-45f3-9f80-3dc0b3c4e6b6)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/839281ee-3f0d-4324-a77b-32ad0d6da560)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/655e3428-de64-4b3a-930f-53fc567181bf)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/96ff895d-21f4-46b9-859c-1dd33c38b47c)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/6f34a5a7-df91-4f36-8dd7-720704a2fd11)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/17d738dd-6fee-4c53-9119-90fb0b1ac6a6)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/077b45b6-f267-448c-84af-78d812be8fbc)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/e5bfc940-98de-4b95-b300-edfd4221da73)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/abdc4cb7-d4bc-416d-b6df-b7edfbdad361)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/b4dc9e17-7e7c-419c-97c6-2a39614f6498)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/85fb674b-1c39-4f23-b9db-cbd6a7c1f2ba)
-![image](https://github.com/bilpang28/Enigma/assets/54619042/f02fbcf1-f64b-4d3a-9462-4adf748753dd)
+Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks atau Tulisan.
+
+# Inisialisasi Variabel
+
+    const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+# Konfigurasi Rotor
+
+    const rotorOrder = [0, 0, 0]; 
+    // Order of rotors
+    const rotorPositions = [0, 0, 0];
+    // Initial positions of rotors
+    const plugboard = 'RBCDEFKHIJGLMNXPQASTUVWOYZ'
+    const reflector = 'EJMZALYXVBWFCRQUONTSPIKHGD'
+
+    const rotorWiring = [
+      'BDFHJLCPRTXVZNYEIWGAKMUSQO',
+      'AJDKSIRUXBLHWTMCQGZNPYFVOE',
+      'EKMFLGDQVZNTOWYHXUSPAIBRCJ'
+    ]; 
+
+
+# Genetic Algorithm 
+
+    let history = []
+    const populationSize = 5;
+    const maxGenerations = 1000;
+    const mutationRate = 0.1;
+    const encryptedMessage = 'NXAWS'
+
+1. fungsi untuk substitusi rotor
+   
+        function rotorSubstitution(idx, alphabet, rotorPosition, wiringOutput){
+            const shiftedRotor = alphabet.slice(rotorPosition) + alphabet.slice(0, rotorPosition);
+            let word = wiringOutput[idx]
+            return shiftedRotor.indexOf(word)
+        }
+   
+2. fungsi substitusi untuk reflector
+   
+        function reflectorSubstitution(idx, alphabet, wiringOutput){
+            let word = wiringOutput[idx]
+            return alphabet.indexOf(word)
+        }
+   
+3. fungsi substitusi untuk revRotor
+   
+        function revRotorSubstitution(idx, alphabet, rotorPosition, wiringOutput){
+            const shiftedRotor = alphabet.slice(rotorPosition) + alphabet.slice(0, rotorPosition);
+            let word = shiftedRotor[idx]
+            return wiringOutput.indexOf(word)
+        }
+4. fungsi untuk plugboard
+   
+        function plugboardSubtitution(word, plugboardWiring){
+          return plugboardWiring.indexOf(word)
+        }
+    
+        function Outputplugboard(idx, plugboardWiring){
+          return plugboardWiring[idx]
+        }
+   
+5. fungsi untuk posisi rotor
+   
+        function Rotors(word, rotorPosition) {
+            let alphabet = ALPHABET
+            let wiring =  rotorWiring
+            let plugboardWiring = plugboard
+            let reflectorWiring = reflector
+            let idx = 0
+            idx = plugboardSubtitution(word, plugboardWiring)
+            idx = rotorSubstitution(idx, alphabet, rotorPosition[0], wiring[0])
+            idx = rotorSubstitution(idx, alphabet, rotorPosition[1], wiring[1])
+            idx = rotorSubstitution(idx, alphabet, rotorPosition[2], wiring[2])
+            
+            idx = reflectorSubstitution(idx, alphabet, reflectorWiring)
+
+ 6. membalik kata untuk encrypt
+    
+        idx = revRotorSubstitution(idx, alphabet, rotorPosition[2], wiring[2])
+        idx = revRotorSubstitution(idx, alphabet, rotorPosition[1], wiring[1])
+        idx = revRotorSubstitution(idx, alphabet, rotorPosition[0], wiring[0])
+        
+        word = Outputplugboard(idx, plugboardWiring)
+        return word
+        }
+
+7. fungsi decrypt
+   
+        function enigmadecrypt(config,message){
+            message = message.toUpperCase()
+            let result = ""
+            let rotate = 0
+            for(let i of message){
+                result += Rotors(i,config)
+                rotate++
+                if(rotate >= message.length){
+                  break
+                }else{
+                  if(config[0] >= 25){
+                if(config[1] >= 25){
+                  config[2]++
+                }else{
+                  config[1]++
+                }
+              }
+              config[0]++
+            }
+        }
+        return result
+          }
+
+8. fungsi sorting
+   
+        function sequentialSort(individual, fitnessValues) {
+          const n = fitnessValues.length;
+          let swapped;
+        
+          do {
+            swapped = false;
+            for (let i = 0; i < n - 1; i++) {
+              if (fitnessValues[i] > fitnessValues[i + 1]) {
+                // Swap elements if they are in the wrong order
+                [fitnessValues[i], fitnessValues[i + 1]] = [fitnessValues[i + 1], fitnessValues[i]];
+                [individual[i], individual[i + 1]] = [individual[i + 1], individual[i]];
+                swapped = true;
+              }
+        }
+          } while (swapped);
+        
+          return individual;
+        }
+   
+9. fungsi untuk fitness
+    
+          function fitnessCheck(individual){
+              let input = encryptedMessage
+              // console.log(`individual : ${individual}`)
+              individual = individual.slice()
+              let decryptedMessage = enigmadecrypt(individual, input)
+          
+              let totalDistance = 0
+              for(let i = 0; i < input.length; i++){
+                totalDistance += Math.abs(ALPHABET.indexOf(input[i]) - ALPHABET.indexOf(decryptedMessage[i]))
+          }
+      
+          return totalDistance
+          }
+
+10. fungsi untuk generateindividual
+        
+            function GenerateIndividual(){
+                let individual = []
+                for(let i = 0; i < rotorOrder.length; i++){
+                    individual.push(parseInt(Math.random() * 26))
+                }
+                return individual
+            }
+
+11. fungsi untuk populasi
+                 
+            function selection(population, fitnessValues) {
+              const selectedParents = [];
+              for (let i = 0; i < populationSize; i++) {
+                const randomIndex1 = Math.floor(Math.random() * populationSize);
+                const randomIndex2 = Math.floor(Math.random() * populationSize);
+                const parent1 = population[randomIndex1];
+                const parent2 = population[randomIndex2];
+                const fitness1 = fitnessValues[randomIndex1];
+                const fitness2 = fitnessValues[randomIndex2];
+                selectedParents.push(fitness1 < fitness2 ? parent1 : parent2);
+              }
+              
+              return sequentialSort(selectedParents, selectedParents.map(fitnessCheck));
+            }
+
+12. Crossover
+    
+        function crossover(parents) {
+          const offspring = parents;
+          for (let i = 1; i < parents.length; i++) {
+            const parent1 = parents[i];
+            const parent2 = parents[(i + 1) % parents.length];
+            const child = [...parent1.slice(0,2), ...parent2.slice(2)];
+            offspring[i] = child;
+          }
+        
+          return offspring;
+        }
+
+13. Fungsi Mutasi
+  
+        function mutation(offspring) {
+          let sum = 0;
+          let mean = 0;
+          let mutatedOffspring = [];
+          let fitnessValues = offspring.map(fitnessCheck);
+        
+          for (let a of fitnessValues) {
+            sum += a;
+          }
+          mean = parseInt(sum / fitnessValues.length);
+        
+          for (let idx in offspring) {
+            let temp = [0, 0, 0];
+        let gen = parseInt(Math.random() * 3);
+
+        if (Math.random() < 0.8) {
+          if (fitnessValues[idx] < mean && Math.random() < 0.05) {
+            if (history.length < offspring.length) {
+              offspring[idx][gen] += 1;
+              temp[gen] = 1;
+              history.push(temp);
+              mutatedOffspring.push(offspring[idx]);
+            } else {
+              if (idx >= 0 && idx < history.length && gen >= 0 && gen < history[idx].length) {
+                offspring[idx][gen] += history[idx][gen];
+              }
+              mutatedOffspring.push(offspring[idx]);
+            }
+            } else if (fitnessValues[idx] > mean && Math.random() < 0.8) {
+              if (history.length < offspring.length - 1) {
+                offspring[idx][gen] += 1;
+                temp[gen] = 1;
+                history.push(temp);
+                mutatedOffspring.push(offspring[idx]);
+              } else {
+                if (idx >= 0 && idx < history.length && gen >= 0 && gen < history[idx].length) {
+                  offspring[idx][gen] += history[idx][gen];
+                }
+                mutatedOffspring.push(offspring[idx]);
+              }
+            } else {
+              mutatedOffspring.push(offspring[idx]);
+            }
+      
+            if (idx >= 0 && idx < history.length && gen >= 0 && gen < history[idx].length) {
+              if (fitnessCheck(mutatedOffspring[idx]) > fitnessValues[idx]) {
+                history[idx][gen] *= -1;
+              }
+            }
+          } else {
+            mutatedOffspring.push(offspring[idx]);
+              }
+            }
+          
+            return mutatedOffspring;
+          }
+      
+          function GeneticAlgorithm(encrypted){
+              let population = []
+              let bestIndividual = 0
+              for(let i = 0; i < populationSize; i++){
+                  population.push(GenerateIndividual())
+              }
+          
+          let generation = 0
+          while(generation < 20){
+              console.log(`\n\n------------------------Generation ${generation} ----------------------------`)
+              console.log(`\npopulation : `)
+              console.log(population)
+
+        let fitnessValues = population.map(fitnessCheck)
+        console.table(fitnessValues)
+
+        let selectedParents = selection(population, fitnessValues);
+        console.log(`\selectedParents : `)
+        console.log(selectedParents)
+        console.log(selectedParents.map(fitnessCheck))
+
+        const offspring = crossover(selectedParents);
+        console.log(`\offspring : `)
+        console.log(offspring)
+        console.log(offspring.map(fitnessCheck))
+        const mutatedOffspring = mutation(offspring);
+        console.log(`\nmutatedOffspring : `)
+        console.log(mutatedOffspring)
+        console.log(mutatedOffspring.map(fitnessCheck))
+        population = mutatedOffspring;
+        console.log(`new population : `)
+        console.log(population)
+        generation++;
+        }
+    
+    
+        return bestIndividual;
+        }
+
+14. fungsi Main
+        
+        function main(){
+            const bestIndividual = GeneticAlgorithm();
+            console.log(`rotor configuration : ${bestIndividual}`)
+            console.log('Decrypted Message:', enigmadecrypt(bestIndividual, encryptedMessage));
+        
+        }
+        main()
