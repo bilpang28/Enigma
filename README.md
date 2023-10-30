@@ -4,10 +4,12 @@
 Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks atau Tulisan.
 
 # Inisialisasi Variabel
+Sebelum melakukan kode kita harus membuat variabel seperti dibawah ini, yaitu variabel abjad untuk digunakan dikemudian:
 
     const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 # Konfigurasi Rotor
+Mengatur mesin rotor dan posisinya dengan menggunakan array sebagai alat untuk membalikkan huruf dengan rumus sigma5:
 
     const rotorOrder = [0, 0, 0]; 
     // Order of rotors
@@ -24,6 +26,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
 
 
 # Genetic Algorithm 
+algoritma ini merupakan algoritma sederhana seperti melakukan sorting, mengambil nilai fitnes dan membuat populasi baru dari hasil terbaru.
 
     let history = []
     const populationSize = 5;
@@ -32,28 +35,29 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
     const encryptedMessage = 'NXAWS'
 
 1. fungsi untuk substitusi rotor
-   
+    mensubstusikan  nilai dari variabel alphabet, posisi rotor dan mengambil output.
+
         function rotorSubstitution(idx, alphabet, rotorPosition, wiringOutput){
             const shiftedRotor = alphabet.slice(rotorPosition) + alphabet.slice(0, rotorPosition);
             let word = wiringOutput[idx]
             return shiftedRotor.indexOf(word)
         }
    
-2. fungsi substitusi untuk reflector
+1. fungsi substitusi untuk reflector
    
         function reflectorSubstitution(idx, alphabet, wiringOutput){
             let word = wiringOutput[idx]
             return alphabet.indexOf(word)
         }
    
-3. fungsi substitusi untuk revRotor
+2. fungsi substitusi untuk revRotor
    
         function revRotorSubstitution(idx, alphabet, rotorPosition, wiringOutput){
             const shiftedRotor = alphabet.slice(rotorPosition) + alphabet.slice(0, rotorPosition);
             let word = shiftedRotor[idx]
             return wiringOutput.indexOf(word)
         }
-4. fungsi untuk plugboard
+3. fungsi untuk plugboard
    
         function plugboardSubtitution(word, plugboardWiring){
           return plugboardWiring.indexOf(word)
@@ -63,7 +67,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
           return plugboardWiring[idx]
         }
    
-5. fungsi untuk posisi rotor
+4. fungsi untuk posisi rotor
    
         function Rotors(word, rotorPosition) {
             let alphabet = ALPHABET
@@ -78,7 +82,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
             
             idx = reflectorSubstitution(idx, alphabet, reflectorWiring)
 
- 6. membalik kata untuk encrypt
+ 5. membalik kata untuk encrypt
     
         idx = revRotorSubstitution(idx, alphabet, rotorPosition[2], wiring[2])
         idx = revRotorSubstitution(idx, alphabet, rotorPosition[1], wiring[1])
@@ -88,7 +92,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
         return word
         }
 
-7. fungsi decrypt
+6. fungsi decrypt
    
         function enigmadecrypt(config,message){
             message = message.toUpperCase()
@@ -113,7 +117,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
         return result
           }
 
-8. fungsi sorting
+7. fungsi sorting
    
         function sequentialSort(individual, fitnessValues) {
           const n = fitnessValues.length;
@@ -134,7 +138,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
           return individual;
         }
    
-9. fungsi untuk fitness
+8. fungsi untuk fitness
     
           function fitnessCheck(individual){
               let input = encryptedMessage
@@ -150,7 +154,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
           return totalDistance
           }
 
-10. fungsi untuk generateindividual
+9. fungsi untuk generateindividual
         
             function GenerateIndividual(){
                 let individual = []
@@ -160,7 +164,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
                 return individual
             }
 
-11. fungsi untuk populasi
+10. fungsi untuk populasi
                  
             function selection(population, fitnessValues) {
               const selectedParents = [];
@@ -177,7 +181,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
               return sequentialSort(selectedParents, selectedParents.map(fitnessCheck));
             }
 
-12. Crossover
+11. Crossover
     
         function crossover(parents) {
           const offspring = parents;
@@ -191,7 +195,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
           return offspring;
         }
 
-13. Fungsi Mutasi
+12. Fungsi Mutasi
   
         function mutation(offspring) {
           let sum = 0;
@@ -289,7 +293,7 @@ Program yang menggunakan cara kerja Enigma untuk melakukan Encrypt berupa Teks a
         return bestIndividual;
         }
 
-14. fungsi Main
+13. fungsi Main
         
         function main(){
             const bestIndividual = GeneticAlgorithm();
