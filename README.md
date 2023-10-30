@@ -294,7 +294,8 @@ algoritma ini merupakan algoritma sederhana seperti melakukan sorting, mengambil
         }
 
 13. fungsi Main
-        
+    merupakan fungsi utama dari kode ini sehingga output akan menampilkan konfigurasi rotor : (dengan nilai individual) dan menampilkan pesan decrypted berupa hasil dari enigmadecrypt.
+    
         function main(){
             const bestIndividual = GeneticAlgorithm();
             console.log(`rotor configuration : ${bestIndividual}`)
